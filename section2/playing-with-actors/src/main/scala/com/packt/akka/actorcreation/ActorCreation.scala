@@ -1,7 +1,12 @@
 package com.packt.akka.actorcreation
 
+import java.util.concurrent.TimeUnit
+
 import akka.actor.{ActorSystem, Props}
 import com.packt.akka.actorcreation.actor.MusicPlayer
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 object ActorCreation extends App {
 
@@ -13,6 +18,7 @@ object ActorCreation extends App {
 
   //send StartMusic Message to actor
   player ! MusicPlayer.StartMusic
+//  player ! MusicPlayer.StartMusic
 
   // Send StopMusic Message to actor
   player ! MusicPlayer.StopMusic
@@ -21,4 +27,5 @@ object ActorCreation extends App {
 
   //shutdown system
   system.terminate()
+  Await.ready(system.whenTerminated, Duration(10, TimeUnit.SECONDS))
 }
