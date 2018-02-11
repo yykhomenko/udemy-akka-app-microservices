@@ -18,7 +18,6 @@ object ActorCreation extends App {
 
   //send StartMusic Message to actor
   player ! MusicPlayer.StartMusic
-//  player ! MusicPlayer.StartMusic
 
   // Send StopMusic Message to actor
   player ! MusicPlayer.StopMusic
