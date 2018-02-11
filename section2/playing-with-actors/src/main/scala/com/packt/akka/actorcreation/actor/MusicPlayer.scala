@@ -21,6 +21,6 @@ class MusicPlayer extends Actor {
     case StopMusic =>
       println("I don't want to stop music.")
     case m =>
-      println("Unknown message: " + m)
+      println(s"${MusicPlayer.getClass}: Unknown message: " + m)
   }
 }
