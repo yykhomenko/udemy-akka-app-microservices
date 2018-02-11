@@ -1,0 +1,22 @@
+package com.packt.akka.actorcreation.actor
+
+import akka.actor.Actor
+
+object MusicPlayer {
+  case object StartMusic
+  case object StopMusic
+}
+
+class MusicPlayer extends Actor {
+  import MusicPlayer._
+
+  def receive = {
+    case StartMusic =>
+      val controller = context.actorOf(MusicController.props, "music-controller")
+      controller ! MusicController.Play
+    case StopMusic =>
+      println("I don't want to stop music.")
+    case m =>
+      println("Unknown message: " + m)
+  }
+}
