@@ -1,10 +1,14 @@
 package com.packt.akka.actorcreation.actor
 
-import akka.actor.Actor
+import akka.actor.{Actor, Props}
 
 object MusicPlayer {
-  case object StartMusic
-  case object StopMusic
+
+  sealed trait PlayerMsg
+  case object StartMusic extends PlayerMsg
+  case object StopMusic extends PlayerMsg
+
+  def props = Props[MusicPlayer]
 }
 
 class MusicPlayer extends Actor {

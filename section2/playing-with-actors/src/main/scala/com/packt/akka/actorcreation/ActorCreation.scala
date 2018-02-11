@@ -1,6 +1,6 @@
 package com.packt.akka.actorcreation
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import com.packt.akka.actorcreation.actor.MusicPlayer
 
 import scala.concurrent.Await
@@ -12,7 +12,7 @@ object ActorCreation extends App {
   val system = ActorSystem("creation")
 
   // Create the 'Zeus' actor
-  val player = system.actorOf(Props[MusicPlayer], "music-player")
+  val player = system.actorOf(MusicPlayer.props, "music-player")
 
   //send StartMusic Message to actor
   player ! MusicPlayer.StartMusic

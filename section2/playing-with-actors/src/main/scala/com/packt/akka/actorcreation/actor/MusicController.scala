@@ -3,8 +3,10 @@ package com.packt.akka.actorcreation.actor
 import akka.actor.{Actor, Props}
 
 object MusicController {
-  case object Play
-  case object Stop
+
+  sealed trait ControllerMsg
+  case object Play extends ControllerMsg
+  case object Stop extends ControllerMsg
 
   def props = Props[MusicController]
 }
