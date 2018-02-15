@@ -19,7 +19,7 @@ object Counter {
 
 class Counter extends PersistentActor with ActorLogging {
 
-  println("Starting ........................")
+  log.info("Starting ........................")
 
   // Persistent Identifier
   override def persistenceId = "counter-example"
@@ -38,26 +38,26 @@ class Counter extends PersistentActor with ActorLogging {
   // Persistent receive on recovery mood
   val receiveRecover: Receive = {
     case evt: Evt =>
-      println(s"Counter receive $evt on recovering mood")
+      log.info(s"Counter receive $evt on recovering mood")
       updateState(evt)
     case SnapshotOffer(_, snapshot: State) =>
-      println(s"Counter receive snapshot with data: $snapshot on recovering mood")
+      log.info(s"Counter receive snapshot with data: $snapshot on recovering mood")
       state = snapshot
     case RecoveryCompleted =>
-      println(s"Recovery Complete and Now I'll switch to receiving mode :)")
+      log.info(s"Recovery Complete and Now I'll switch to receiving mode :)")
   }
 
   // Persistent receive on normal mood
   val receiveCommand: Receive = {
     case cmd@Cmd(op) =>
-      println(s"Counter receive $cmd")
+      log.info(s"Counter receive $cmd")
       persist(Evt(op))(evt => updateState(evt))
     case "print" =>
-      println(s"The Current state of counter is $state")
+      log.info(s"The Current state of counter is $state")
     case SaveSnapshotSuccess(metadata) =>
-      println(s"save snapshot succeed.")
+      log.info(s"save snapshot succeed.")
     case SaveSnapshotFailure(metadata, reason) =>
-      println(s"save snapshot failed and failure is $reason")
+      log.error(s"save snapshot failed and failure is $reason")
   }
 
   def takeSnapshot() =

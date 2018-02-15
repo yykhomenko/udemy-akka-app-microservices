@@ -7,7 +7,6 @@ import com.packt.akka.actor.Counter._
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-
 object PersistentApp extends App {
 
   val system = ActorSystem("persistent-actors")
