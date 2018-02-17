@@ -45,23 +45,21 @@ class Account extends PersistentFSM[Account.State, Account.Data, Account.DomainE
 
   override def persistenceId: String = "account"
 
-  override def applyEvent(evt: DomainEvent, currentData: Data): Data = {
-    evt match {
-      case AcceptedTransaction(amount, CR) =>
-        val newAmount = currentData.amount + amount
-        println(s"Your new balance is $newAmount")
-        Balance(currentData.amount + amount)
-      case AcceptedTransaction(amount, DR) =>
-        val newAmount = currentData.amount - amount
-        println(s"Your new balance is $newAmount")
-        if (newAmount > 0)
-          Balance(newAmount)
-        else
-          ZeroBalance
-      case RejectedTransaction(_, _, reason) =>
-        println(s"RejectedTransaction with reason: $reason")
-        currentData
-    }
+  override def applyEvent(evt: DomainEvent, currentData: Data): Data = evt match {
+    case AcceptedTransaction(amount, CR) =>
+      val newAmount = currentData.amount + amount
+      println(s"your new balance is $newAmount")
+      Balance(newAmount)
+    case AcceptedTransaction(amount, DR) =>
+      val newAmount = currentData.amount - amount
+      println(s"your new balance is $newAmount")
+      if (newAmount > 0)
+        Balance(newAmount)
+      else
+        ZeroBalance
+    case RejectedTransaction(_, _, reason) =>
+      println(s"rejectedTransaction with reason: $reason")
+      currentData
   }
 
   override def domainEventClassTag: ClassTag[DomainEvent] = classTag[DomainEvent]
@@ -70,11 +68,11 @@ class Account extends PersistentFSM[Account.State, Account.Data, Account.DomainE
 
   when(Empty) {
     case Event(Operation(amount, CR), _) =>
-      println(s"Hi, It's your first Credit Operation.")
+      println(s"hi, It's your first Credit Operation.")
       goto(Active) applying AcceptedTransaction(amount, CR)
     case Event(Operation(amount, DR), _) =>
-      println(s"Sorry your account has zero balance.")
-      stay applying RejectedTransaction(amount, DR, "Balance is Zero")
+      println(s"sorry your account has zero balance.")
+      stay applying RejectedTransaction(amount, DR, "balance is Zero")
   }
 
   when(Active) {

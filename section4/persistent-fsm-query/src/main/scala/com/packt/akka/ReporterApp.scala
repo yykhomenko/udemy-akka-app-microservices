@@ -8,7 +8,7 @@ import akka.stream.ActorMaterializer
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-object Reporter extends App {
+object ReporterApp extends App {
 
   val system = ActorSystem("persistent-query")
   implicit val mat = ActorMaterializer()(system)
@@ -17,7 +17,7 @@ object Reporter extends App {
     .readJournalFor[LeveldbReadJournal](LeveldbReadJournal.Identifier)
 
   val evts = queries.eventsByPersistenceId("account")
-  evts.runForeach(evt => println(s"Event $evt"))
+  evts.runForeach(evt => println(s"event $evt"))
 
   Thread.sleep(1000)
 

@@ -1,14 +1,13 @@
 package com.packt.akka
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import com.packt.akka.actor.Account
 import com.packt.akka.actor.Account._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-
-object PersistentFSM extends App {
+object PersistentFSMApp extends App {
 
   val system = ActorSystem("persistent-fsm-actors")
   val account = system.actorOf(Account.props)
