@@ -62,7 +62,7 @@ class Counter extends PersistentActor with ActorLogging {
     case Get => 
       log.info(s"Counter with path: $self received Get Command")
       log.info(s"Count = $count")
-      sender() ! count
+      sender ! count
     case Stop => 
       context.stop(self)
   }
