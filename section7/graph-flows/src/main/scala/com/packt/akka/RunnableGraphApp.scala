@@ -1,9 +1,8 @@
 package com.packt.akka
 
-import akka.NotUsed
 import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, ClosedShape}
 import akka.stream.scaladsl._
+import akka.stream.{ActorMaterializer, ClosedShape}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -21,7 +20,7 @@ object RunnableGraphApp extends App {
 
   val out = Sink.foreach[Int](println)
 
-  val g = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder: GraphDSL.Builder[NotUsed] =>
+  val g = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
 
     import GraphDSL.Implicits._
 
