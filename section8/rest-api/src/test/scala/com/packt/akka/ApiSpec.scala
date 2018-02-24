@@ -5,13 +5,13 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.packt.akka.db.{Created, TweetManager}
 import com.packt.akka.model._
-import org.scalatest.{BeforeAndAfterAll, FlatSpec, MustMatchers}
+import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class ApiSpec extends FlatSpec with MustMatchers
+class ApiSpec extends FlatSpec with Matchers
   with ScalatestRouteTest with BeforeAndAfterAll with RestApi {
 
   import TweetEntityProtocol.EntityFormat
@@ -29,16 +29,16 @@ class ApiSpec extends FlatSpec with MustMatchers
     val Created(id) = Await.result(f, 1.second)
 
     Get("/tweets") ~> route ~> check {
-      status must equal(OK)
+      status shouldEqual OK
       val res = responseAs[List[TweetEntity]]
-      res.size must equal(1)
-      res.head must equal(TweetEntity(BSONObjectID.parse(id).get, tweet.author, tweet.body))
+      res.size shouldEqual 1
+      res.head shouldEqual TweetEntity(BSONObjectID.parse(id).get, tweet.author, tweet.body)
     }
   }
 
   it should "return created response when create new tweet" in {
     Post("/tweets", Tweet("akka", "hello world")) ~> route ~> check {
-      status must equal(Created)
+      status shouldEqual Created
     }
   }
 
@@ -49,7 +49,7 @@ class ApiSpec extends FlatSpec with MustMatchers
     val Created(id) = Await.result(f, 1.second)
 
     Delete(s"/tweets/$id") ~> route ~> check {
-      status must equal(NoContent)
+      status shouldEqual NoContent
     }
   }
 
@@ -60,8 +60,8 @@ class ApiSpec extends FlatSpec with MustMatchers
     val Created(id) = Await.result(f, 1.second)
 
     Get(s"/tweets/$id") ~> route ~> check {
-      status must equal(OK)
-      responseAs[TweetEntity] must equal(tweetEntity)
+      status shouldEqual OK
+      responseAs[TweetEntity] shouldEqual tweetEntity
     }
   }
 }
