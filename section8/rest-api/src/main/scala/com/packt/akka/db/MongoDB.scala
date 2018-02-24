@@ -16,4 +16,5 @@ object MongoDB {
   val connection = driver.connection(servers)
 
   val db = connection(database)
+  Thread.sleep(500)
 }

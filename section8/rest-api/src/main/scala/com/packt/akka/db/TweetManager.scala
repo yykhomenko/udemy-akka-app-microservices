@@ -27,7 +27,7 @@ object TweetManager {
     collection.find(emptyQuery).cursor[BSONDocument]()
       .collect[Vector](-1, Cursor.FailOnError[Vector[BSONDocument]]())
 
-  private def queryById(id: String) = BSONDocument("_id" -> BSONObjectID(id))
+  private def queryById(id: String) = BSONDocument("_id" -> BSONObjectID.parse(id).get)
 
   private def emptyQuery = BSONDocument()
 }
