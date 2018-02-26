@@ -5,6 +5,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Terminated}
 import scala.collection.mutable
 
 object MasterWorkerProtocol {
+
   // Messages from Workers
   case class WorkerCreated(worker: ActorRef)
   case class WorkerRequestsWork(worker: ActorRef)
@@ -27,14 +28,12 @@ class Master extends Actor with ActorLogging {
 
   // Notifies workers that there's work available, provided they're
   // not already working on something
-  def notifyWorkers(): Unit = {
-    if (workQ.nonEmpty) {
-      workers.foreach { 
+  def notifyWorkers() =
+    if (workQ.nonEmpty)
+      workers.foreach {
         case (worker, m) if m.isEmpty => worker ! WorkIsReady
         case _ =>
       }
-    }
-  }
 
   def receive = {
     // Worker is alive. Add him to the list, watch him for

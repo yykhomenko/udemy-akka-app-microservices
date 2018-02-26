@@ -14,12 +14,10 @@ class TestWorker(masterLocation: ActorPath) extends Worker(masterLocation) {
   // You can use whatever you want.
   implicit val ec = context.dispatcher
 
-  def doWork(workSender: ActorRef, msg: Any): Unit = {
-    Future {
+  def doWork(workSender: ActorRef, msg: Any) = Future {
       workSender ! msg
       WorkComplete("done")
     } pipeTo self
-  }
 }
 
 class BadTestWorker(masterLocation: ActorPath) extends Worker(masterLocation) {
@@ -27,20 +25,17 @@ class BadTestWorker(masterLocation: ActorPath) extends Worker(masterLocation) {
   // You can use whatever you want.
   implicit val ec = context.dispatcher
 
-  def doWork(workSender: ActorRef, msg: Any): Unit = context.stop(self)
+  def doWork(workSender: ActorRef, msg: Any) = context.stop(self)
 }
 
 class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
   with ImplicitSender with WordSpecLike with BeforeAndAfterAll with MustMatchers {
 
   implicit val ec = system.dispatcher
-
   implicit val askTimeout = Timeout(1 second)
 
-  override def afterAll() {
-    system.terminate()
-  }
-
+  override def afterAll() = system.terminate()
+  
   def worker(name: String) = system.actorOf(Props(
     new TestWorker(ActorPath.fromString(
       "akka://%s/user/%s".format(system.name, name)))))
@@ -50,6 +45,7 @@ class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
       "akka://%s/user/%s".format(system.name, name)))))
 
   "Worker" should {
+
     "work" in {
       // Spin up the master
       val m = system.actorOf(Props[Master], "master")
@@ -66,7 +62,8 @@ class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
       // We should get it all back
       expectMsgAllOf("Hithere", "Guys", "So", "What's", "Up?")
     }
-    "still work if one dies" in { //{2
+
+    "still work if one dies" in {
       // Spin up the master
       val m = system.actorOf(Props[Master], "master2")
       // Create three workers
@@ -80,8 +77,9 @@ class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
       m ! "Up?"
       // We should get it all back
       expectMsgAllOf("Hithere", "Guys", "So", "What's", "Up?")
-    } //}2
-    "work with Futures" in { //{2
+    }
+
+    "work with Futures" in {
       // Spin up the master
       val m = system.actorOf(Props[Master], "master3")
       // Create three workers
