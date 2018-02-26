@@ -1,27 +1,25 @@
 package com.akka.packt
 
-import akka.actor.{ActorSystem, Actor, Props}
-import scala.concurrent.duration._
-import com.akka.pattern.throttle.TimerBasedThrottler
 import java.util.Date
 
+import akka.actor.{Actor, ActorSystem, Props}
+import com.akka.pattern.throttle.TimerBasedThrottler
+
+import scala.concurrent.duration._
 
 class Target extends Actor {
-
   def receive = {
-    case msg =>
-      println(s"[${new Date().toString}}] I receive msg: $msg")
+    case msg => println(s"[${new Date().toString}}] I receive msg: $msg")
   }
 }
 
+object ThrottlerApp extends App {
 
-object ThottlerApp extends App{
   import com.akka.pattern.throttle.Throttler._
 
   val system = ActorSystem("Thottler-Messages")
 
   val target = system.actorOf(Props[Target], "target")
-
   val throttler = system.actorOf(Props(classOf[TimerBasedThrottler], 3 msgsPer 1.second))
 
   throttler ! SetTarget(Some(target))
@@ -33,6 +31,5 @@ object ThottlerApp extends App{
   throttler ! "5"
 
   Thread.sleep(5000)
-  system.shutdown()
-
+  system.terminate()
 }

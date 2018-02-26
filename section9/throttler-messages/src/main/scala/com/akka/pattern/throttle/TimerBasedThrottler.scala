@@ -228,7 +228,7 @@ class TimerBasedThrottler(var rate: Rate) extends Actor with FSM[State, Data] {
       stay using d.copy(callsLeftInThisPeriod = rate.numberOfCalls)
 
     // Set the target
-    case Event(SetTarget(t @ Some(_)), d) if !d.queue.isEmpty ⇒
+    case Event(SetTarget(t @ Some(_)), d) if d.queue.nonEmpty ⇒
       goto(Active) using deliverMessages(d.copy(target = t))
     case Event(SetTarget(t), d) ⇒
       stay using d.copy(target = t)
@@ -287,7 +287,7 @@ class TimerBasedThrottler(var rate: Rate) extends Actor with FSM[State, Data] {
 
   initialize()
 
-  private def startTimer(rate: Rate) = setTimer("morePermits", Tick, rate.duration, true)
+  private def startTimer(rate: Rate) = setTimer("morePermits", Tick, rate.duration, repeat = true)
   private def stopTimer() = cancelTimer("morePermits")
 
   /**
