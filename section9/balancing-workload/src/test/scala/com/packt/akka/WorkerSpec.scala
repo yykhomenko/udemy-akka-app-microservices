@@ -35,14 +35,12 @@ class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
   implicit val askTimeout = Timeout(1 second)
 
   override def afterAll() = system.terminate()
-  
+
   def worker(name: String) = system.actorOf(Props(
-    new TestWorker(ActorPath.fromString(
-      "akka://%s/user/%s".format(system.name, name)))))
+    new TestWorker(ActorPath.fromString(s"akka://${system.name}/user/$name"))))
 
   def badWorker(name: String) = system.actorOf(Props(
-    new BadTestWorker(ActorPath.fromString(
-      "akka://%s/user/%s".format(system.name, name)))))
+    new BadTestWorker(ActorPath.fromString(s"akka://${system.name}/user/$name"))))
 
   "Worker" should {
 
