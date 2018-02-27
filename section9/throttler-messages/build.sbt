@@ -1,4 +1,4 @@
-name := "throttler-messages"
+name := "throttler-messages-pattern"
 organization := "akka.pattern.throttle"
 scalaVersion := "2.12.4"
  
